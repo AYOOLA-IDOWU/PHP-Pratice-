@@ -61,7 +61,7 @@
     
     <h2>User Registration Form</h2>
     
-    <form action="signupprocess.php" method="POST">
+    <form action="signupprocess.php" method="post">
         <div class="form-group">
             <label for="firstname">First Name:</label>
             <input type="text" class="form-control" name="firstname" required>

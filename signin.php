@@ -1,17 +1,31 @@
 <?php
 require 'database_con.php';
-if(isset($_POST['submit'])){
-$email=$_POST['email'];
-$password=$_POST['password'];
-$query="SELECT * FROM pupils_table WHERE email='$email'";
-$con =$database_con->query($query);
-if($con->num_rows>0){
-    echo 'Email exist';
-}else{
-    echo 'Email does not exist';
-}
+
+if (isset($_POST['submit'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $query = "SELECT * FROM pupils_table WHERE email='$email'";
+    $con = $database_con->query($query);
+
+    if ($con->num_rows > 0) {
+        $user = $con->fetch_assoc();
+        $hashed = $user['password'];
+        $password_verify = password_verify($password, $hashed);
+
+        if ($password_verify) {
+            $pupilsid=$user['pupils_id'];
+            header('location:dashboard.php');
+        } else {
+            echo '<div>PASSWORD IS NOT CORRECT</div>';
+        }
+    } else {
+        echo '<div>EMAIL DOES NOT EXIST</div>';
+    }
+
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,9 +33,7 @@ if($con->num_rows>0){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Sign In</title>
-    <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Optional: Your custom styles -->
     <style>
         body {
             background-color: #f8f9fa;
@@ -51,7 +63,7 @@ if($con->num_rows>0){
                             <label for="password">Password:</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block" name="signin">Sign In</button>
+                        <button type="submit" class="btn btn-primary btn-block" name="submit">Sign In</button>
                     </form>
                 </div>
                 <div class="card-footer text-center">
